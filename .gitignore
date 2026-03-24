@@ -1,0 +1,8 @@
+# Ejecutable
+simulador
+
+# Archivos generados
+*.csv
+
+# Graficas
+*.png
