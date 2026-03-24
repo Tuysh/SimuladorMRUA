@@ -1,6 +1,10 @@
 # Ejecutable
 simulador
 
+# Archivos de compilación
+*.o
+*.out
+
 # Archivos generados
 *.csv
 
