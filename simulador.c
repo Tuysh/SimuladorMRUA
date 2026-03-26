@@ -1,27 +1,35 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
+
+#define TOLERANCIA 0.1
+#define ARCHIVO_RESULTADOS "datos.csv"
 
 int main()
 {
-    float aceleracion, velocidadInicial, posicionInicial, tiempoAlturaMaxima, alturaMaxima;
-    float tiempoSimulacion, tiempoPaso;  
-
-    // Calculos para el MRUA
+    float aceleracion;
     printf("Ingrese la aceleración (en m/s^2): ");
     scanf("%f", &aceleracion);
 
+    float velocidadInicial;
     printf("Ingrese la velocidad inicial (en m/s): ");
     scanf("%f", &velocidadInicial);
 
-    printf("Ingrese la posición inicial (en m): ");
-    scanf("%f", &posicionInicial);
+    float posicionInicial;
+    do
+    {
+        printf("Ingrese la posición inicial (en m): ");
+        scanf("%f", &posicionInicial);
+    } while (posicionInicial < 0);
 
+    float tiempoSimulacion;
     do
     {
         printf("Ingrese el tiempo de simulación (en segundos): ");
         scanf("%f", &tiempoSimulacion);
     } while (tiempoSimulacion <= 0);
 
+    float tiempoPaso;
     do
     {
         printf("Ingrese el tiempo de paso (en segundos): ");
@@ -38,22 +46,20 @@ int main()
     if (velocidadesNumerica == NULL || velocidades == NULL || posiciones == NULL || tiempos == NULL)
     {
         fprintf(stderr, "Error al asignar memoria.\n");
-
         free(velocidadesNumerica);
         free(velocidades);
         free(posiciones);
         free(tiempos);
 
-        return 1;
+        return EXIT_FAILURE;
     }
 
-    /* ========= Tiro vertical hacia arriba ========= */
     if (velocidadInicial > 0 && aceleracion < 0)
     {
         printf("\nTu movimiento es tiro vertical hacia arriba.\n");
-        
-        tiempoAlturaMaxima = -velocidadInicial / aceleracion;
-        alturaMaxima = posicionInicial + velocidadInicial * tiempoAlturaMaxima + 0.5 * aceleracion * tiempoAlturaMaxima * tiempoAlturaMaxima;
+
+        float tiempoAlturaMaxima = -velocidadInicial / aceleracion;
+        float alturaMaxima = posicionInicial + velocidadInicial * tiempoAlturaMaxima + 0.5 * aceleracion * tiempoAlturaMaxima * tiempoAlturaMaxima;
 
         printf("Tiempo para alcanzar la altura máxima: %.2f segundos\n", tiempoAlturaMaxima);
         printf("Altura máxima alcanzada: %.2f metros\n", alturaMaxima);
@@ -76,34 +82,36 @@ int main()
         {
             velocidadesNumerica[i] = velocidades[i];
         }
+
+        if (fabs(velocidadesNumerica[i] - velocidades[i]) > TOLERANCIA)
+        {
+            printf("Diferencia significativa en el paso %d: Velocidad analítica = %.2f, Velocidad numérica = %.2f\n", i, velocidades[i], velocidadesNumerica[i]);
+        }
     }
 
-    // Archivo CSV
-    FILE *file = fopen("datos.csv", "w");
-
-    if (file == NULL)
+    FILE *archivoCSV = fopen(ARCHIVO_RESULTADOS, "w");
+    if (archivoCSV == NULL)
     {
-        printf("Error al abrir el archivo.\n");
-
+        fprintf(stderr, "Error al abrir el archivo.\n");
         free(tiempos);
         free(velocidades);
         free(posiciones);
         free(velocidadesNumerica);
-        return 1;
+        return EXIT_FAILURE;
     }
 
-    fprintf(file, "Tiempo,Velocidad,Posición,Velocidad Numérica\n");
+    fprintf(archivoCSV, "Tiempo,Velocidad,Posición,Velocidad Numérica\n");
     for (int i = 0; i < numPasos; i++)
     {
-        fprintf(file, "%.2f,%.2f,%.2f,%.2f\n", tiempos[i], velocidades[i], posiciones[i], velocidadesNumerica[i]);
+        fprintf(archivoCSV, "%.4f,%.4f,%.4f,%.4f\n", tiempos[i], velocidades[i], posiciones[i], velocidadesNumerica[i]);
     }
 
-    fclose(file);
+    fclose(archivoCSV);
 
     free(tiempos);
     free(velocidades);
     free(posiciones);
     free(velocidadesNumerica);
 
-    return 0;
+    return EXIT_SUCCESS;
 }
