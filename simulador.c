@@ -72,8 +72,8 @@ int main()
         float tiempoAlturaMaxima = -velocidadInicial / aceleracion;
         float alturaMaxima = posicionInicial + velocidadInicial * tiempoAlturaMaxima + 0.5 * aceleracion * tiempoAlturaMaxima * tiempoAlturaMaxima;
 
-        printf("Tiempo para alcanzar la altura máxima: %.2f segundos\n", tiempoAlturaMaxima);
-        printf("Altura máxima alcanzada: %.2f metros\n", alturaMaxima);
+        printf("Tiempo para alcanzar la altura máxima: %.4f segundos\n", tiempoAlturaMaxima);
+        printf("Altura máxima alcanzada: %.4f metros\n", alturaMaxima);
     }
 
     for (int i = 0; i < numPasos; i++)
@@ -89,7 +89,7 @@ int main()
 
         if (fabs(velocidadesNumerica[i] - velocidades[i]) > TOLERANCIA)
         {
-            printf("Diferencia significativa en el paso %d: Velocidad analítica = %.2f, Velocidad numérica = %.2f\n", i, velocidades[i], velocidadesNumerica[i]);
+            printf("Diferencia significativa en el paso %d: Velocidad analítica = %.4f, Velocidad numérica = %.4f\n", i, velocidades[i], velocidadesNumerica[i]);
         }
     }
 
