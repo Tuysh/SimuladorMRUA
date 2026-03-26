@@ -81,6 +81,37 @@ int main()
         tiempos[i] = i * tiempoPaso;
         velocidades[i] = velocidadInicial + aceleracion * tiempos[i];
         posiciones[i] = posicionInicial + velocidadInicial * tiempos[i] + 0.5 * aceleracion * tiempos[i] * tiempos[i];
+
+        if (posiciones[i] < 0)
+        {
+            printf("El objeto ha tocado el suelo en el tiempo %.4f.\n", tiempos[i]);
+
+            int nuevosPasos = i + 1;
+
+            float *tmp1 = realloc(velocidadesNumerica, (nuevosPasos) * sizeof(float));
+            float *tmp2 = realloc(velocidades, (nuevosPasos) * sizeof(float));
+            float *tmp3 = realloc(posiciones, (nuevosPasos) * sizeof(float));
+            float *tmp4 = realloc(tiempos, (nuevosPasos) * sizeof(float));
+
+            if (tmp1 == NULL || tmp2 == NULL || tmp3 == NULL || tmp4 == NULL)
+            {
+                fprintf(stderr, "Error al redimensionar memoria.\n");
+                free(velocidadesNumerica);
+                free(velocidades);
+                free(posiciones);
+                free(tiempos);
+                return EXIT_FAILURE;
+            }
+
+            velocidadesNumerica = tmp1;
+            velocidades = tmp2;
+            posiciones = tmp3;
+            tiempos = tmp4;
+
+            numPasos = nuevosPasos;
+
+            break;
+        }
     }
 
     for (int i = 0; i < numPasos - 1; i++)
