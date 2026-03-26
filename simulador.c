@@ -22,7 +22,6 @@ int main()
         printf("Entrada inválida. Por favor, ingrese un número para la velocidad inicial: ");
         while (getchar() != '\n');
     }
-    
 
     float posicionInicial;
     printf("Ingrese la posición incial (en m): ");
@@ -39,7 +38,7 @@ int main()
         printf("Entrada inválida. Por favor, ingrese un número positivo para el tiempo de simulación: ");
         while (getchar() != '\n');
     }
-    
+
     float tiempoPaso;
     printf("Ingrese el tiempo de paso para la simulación (en segundos): ");
     while (scanf("%f", &tiempoPaso) != 1 || tiempoPaso >= tiempoSimulacion)
@@ -84,22 +83,18 @@ int main()
         posiciones[i] = posicionInicial + velocidadInicial * tiempos[i] + 0.5 * aceleracion * tiempos[i] * tiempos[i];
     }
 
-    for (int i = 0; i < numPasos; i++)
+    for (int i = 0; i < numPasos - 1; i++)
     {
-        if (i < numPasos - 1)
-        {
-            velocidadesNumerica[i] = (posiciones[i + 1] - posiciones[i]) / tiempoPaso;
-        }
-        else
-        {
-            velocidadesNumerica[i] = velocidades[i];
-        }
+        velocidadesNumerica[i] = (posiciones[i + 1] - posiciones[i]) / tiempoPaso;
 
         if (fabs(velocidadesNumerica[i] - velocidades[i]) > TOLERANCIA)
         {
             printf("Diferencia significativa en el paso %d: Velocidad analítica = %.2f, Velocidad numérica = %.2f\n", i, velocidades[i], velocidadesNumerica[i]);
         }
     }
+
+    int ultimo = numPasos - 1;
+    velocidadesNumerica[ultimo] = velocidades[ultimo];
 
     FILE *archivoCSV = fopen(ARCHIVO_RESULTADOS, "w");
     if (archivoCSV == NULL)
