@@ -2,26 +2,46 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define TOLERANCIA 0.1
+#define TOLERANCIA 1
 #define ARCHIVO_RESULTADOS "datos.csv"
 #define DECIMALES_CSV "%.8f"
 
 int main()
 {
+    printf("--- Simulador de Movimiento Rectilíneo Uniformemente Acelerado (MRUA) ---\n");
+    printf("Seleccione el escenario a simular:\n");
+    printf("1. Caída Libre\n");
+    printf("2. Tiro Vertical Hacia Arriba\n");
+    printf("Ingrese su opción: ");
+
+    int opcion;
+    while (scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2))
+    {
+        printf("Entrada inválida. Por favor, ingrese 1 para Caída Libre o 2 para Tiro Vertical: ");
+        while (getchar() != '\n');
+    }
+
     float aceleracion;
-    printf("Ingrese la aceleración (en m/s^2): ");
+    printf("Ingrese la aceleración (en m/s^2) (Ingrese 0 si quiere que la aceleración sea la gravedad terrestre): ");
     while (scanf("%f", &aceleracion) != 1)
     {
         printf("Entrada inválida. Por favor, ingrese un número para la aceleración: ");
         while (getchar() != '\n');
     }
 
-    float velocidadInicial;
-    printf("Ingrese la velocidad inicial (en m/s): ");
-    while (scanf("%f", &velocidadInicial) != 1)
+    // Generamos un valor por defecto para la aceleración si el usuario ingresa 0, asumiendo que se trata de una caída libre bajo la gravedad terrestre.
+    if (aceleracion == 0)
+        aceleracion = -9.81;
+
+    float velocidadInicial = 0;
+    if (opcion != 1)
     {
-        printf("Entrada inválida. Por favor, ingrese un número para la velocidad inicial: ");
-        while (getchar() != '\n');
+        printf("Ingrese la velocidad inicial (en m/s): ");
+        while (scanf("%f", &velocidadInicial) != 1)
+        {
+            printf("Entrada inválida. Por favor, ingrese un número para la velocidad inicial: ");
+            while (getchar() != '\n');
+        }
     }
 
     float posicionInicial;
@@ -77,8 +97,6 @@ int main()
         printf("Altura máxima alcanzada: " DECIMALES_CSV " metros\n", alturaMaxima);
     }
 
-    int modificado = 0;
-
     for (int i = 0; i < numPasos; i++)
     {
         tiempos[i] = i * tiempoPaso;
@@ -90,33 +108,9 @@ int main()
             printf("El objeto ha tocado el suelo en el tiempo " DECIMALES_CSV ".\n", tiempos[i]);
 
             numPasos = i + 1;
-            modificado = 1;
 
             break;
         }
-    }
-
-    if (modificado)
-    {
-        float *tmp1 = realloc(velocidadesNumerica, (numPasos) * sizeof(float));
-        float *tmp2 = realloc(velocidades, (numPasos) * sizeof(float));
-        float *tmp3 = realloc(posiciones, (numPasos) * sizeof(float));
-        float *tmp4 = realloc(tiempos, (numPasos) * sizeof(float));
-
-        if (tmp1 == NULL || tmp2 == NULL || tmp3 == NULL || tmp4 == NULL)
-        {
-            fprintf(stderr, "Error al redimensionar memoria.\n");
-            free(velocidadesNumerica);
-            free(velocidades);
-            free(posiciones);
-            free(tiempos);
-            return EXIT_FAILURE;
-        }
-
-        velocidadesNumerica = tmp1;
-        velocidades = tmp2;
-        posiciones = tmp3;
-        tiempos = tmp4;
     }
 
     for (int i = 0; i < numPasos - 1; i++)
