@@ -9,32 +9,44 @@ int main()
 {
     float aceleracion;
     printf("Ingrese la aceleración (en m/s^2): ");
-    scanf("%f", &aceleracion);
+    while (scanf("%f", &aceleracion) != 1)
+    {
+        printf("Entrada inválida. Por favor, ingrese un número para la aceleración: ");
+        while (getchar() != '\n');
+    }
 
     float velocidadInicial;
     printf("Ingrese la velocidad inicial (en m/s): ");
-    scanf("%f", &velocidadInicial);
+    while (scanf("%f", &velocidadInicial) != 1)
+    {
+        printf("Entrada inválida. Por favor, ingrese un número para la velocidad inicial: ");
+        while (getchar() != '\n');
+    }
+    
 
     float posicionInicial;
-    do
+    printf("Ingrese la posición incial (en m): ");
+    while (scanf("%f", &posicionInicial) != 1 || posicionInicial < 0)
     {
-        printf("Ingrese la posición inicial (en m): ");
-        scanf("%f", &posicionInicial);
-    } while (posicionInicial < 0);
+        printf("Entrada inválida. Por favor, ingrese un número positivo para la posición inicial: ");
+        while (getchar() != '\n');
+    }
 
     float tiempoSimulacion;
-    do
+    printf("Ingrese el tiempo total de simulación (en segundos): ");
+    while (scanf("%f", &tiempoSimulacion) != 1 || tiempoSimulacion <= 0)
     {
-        printf("Ingrese el tiempo de simulación (en segundos): ");
-        scanf("%f", &tiempoSimulacion);
-    } while (tiempoSimulacion <= 0);
-
+        printf("Entrada inválida. Por favor, ingrese un número positivo para el tiempo de simulación: ");
+        while (getchar() != '\n');
+    }
+    
     float tiempoPaso;
-    do
+    printf("Ingrese el tiempo de paso para la simulación (en segundos): ");
+    while (scanf("%f", &tiempoPaso) != 1 || tiempoPaso >= tiempoSimulacion)
     {
-        printf("Ingrese el tiempo de paso (en segundos): ");
-        scanf("%f", &tiempoPaso);
-    } while (tiempoPaso >= tiempoSimulacion);
+        printf("Entrada inválida. Por favor, ingrese un número positivo para el tiempo de paso: ");
+        while (getchar() != '\n');
+    }
 
     int numPasos = (int)(tiempoSimulacion / tiempoPaso);
 
