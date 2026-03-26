@@ -4,6 +4,7 @@
 
 #define TOLERANCIA 0.1
 #define ARCHIVO_RESULTADOS "datos.csv"
+#define DECIMALES_CSV "%.8f"
 
 int main()
 {
@@ -41,7 +42,7 @@ int main()
 
     float tiempoPaso;
     printf("Ingrese el tiempo de paso para la simulación (en segundos): ");
-    while (scanf("%f", &tiempoPaso) != 1 || tiempoPaso >= tiempoSimulacion)
+    while (scanf("%f", &tiempoPaso) != 1 || tiempoPaso >= tiempoSimulacion || tiempoPaso <= 0)
     {
         printf("Entrada inválida. Por favor, ingrese un número positivo para el tiempo de paso: ");
         while (getchar() != '\n');
@@ -72,9 +73,11 @@ int main()
         float tiempoAlturaMaxima = -velocidadInicial / aceleracion;
         float alturaMaxima = posicionInicial + velocidadInicial * tiempoAlturaMaxima + 0.5 * aceleracion * tiempoAlturaMaxima * tiempoAlturaMaxima;
 
-        printf("Tiempo para alcanzar la altura máxima: %.4f segundos\n", tiempoAlturaMaxima);
-        printf("Altura máxima alcanzada: %.4f metros\n", alturaMaxima);
+        printf("Tiempo para alcanzar la altura máxima: " DECIMALES_CSV " segundos\n", tiempoAlturaMaxima);
+        printf("Altura máxima alcanzada: " DECIMALES_CSV " metros\n", alturaMaxima);
     }
+
+    int modificado = 0;
 
     for (int i = 0; i < numPasos; i++)
     {
@@ -84,34 +87,36 @@ int main()
 
         if (posiciones[i] < 0)
         {
-            printf("El objeto ha tocado el suelo en el tiempo %.4f.\n", tiempos[i]);
+            printf("El objeto ha tocado el suelo en el tiempo " DECIMALES_CSV ".\n", tiempos[i]);
 
-            int nuevosPasos = i + 1;
-
-            float *tmp1 = realloc(velocidadesNumerica, (nuevosPasos) * sizeof(float));
-            float *tmp2 = realloc(velocidades, (nuevosPasos) * sizeof(float));
-            float *tmp3 = realloc(posiciones, (nuevosPasos) * sizeof(float));
-            float *tmp4 = realloc(tiempos, (nuevosPasos) * sizeof(float));
-
-            if (tmp1 == NULL || tmp2 == NULL || tmp3 == NULL || tmp4 == NULL)
-            {
-                fprintf(stderr, "Error al redimensionar memoria.\n");
-                free(velocidadesNumerica);
-                free(velocidades);
-                free(posiciones);
-                free(tiempos);
-                return EXIT_FAILURE;
-            }
-
-            velocidadesNumerica = tmp1;
-            velocidades = tmp2;
-            posiciones = tmp3;
-            tiempos = tmp4;
-
-            numPasos = nuevosPasos;
+            numPasos = i + 1;
+            modificado = 1;
 
             break;
         }
+    }
+
+    if (modificado)
+    {
+        float *tmp1 = realloc(velocidadesNumerica, (numPasos) * sizeof(float));
+        float *tmp2 = realloc(velocidades, (numPasos) * sizeof(float));
+        float *tmp3 = realloc(posiciones, (numPasos) * sizeof(float));
+        float *tmp4 = realloc(tiempos, (numPasos) * sizeof(float));
+
+        if (tmp1 == NULL || tmp2 == NULL || tmp3 == NULL || tmp4 == NULL)
+        {
+            fprintf(stderr, "Error al redimensionar memoria.\n");
+            free(velocidadesNumerica);
+            free(velocidades);
+            free(posiciones);
+            free(tiempos);
+            return EXIT_FAILURE;
+        }
+
+        velocidadesNumerica = tmp1;
+        velocidades = tmp2;
+        posiciones = tmp3;
+        tiempos = tmp4;
     }
 
     for (int i = 0; i < numPasos - 1; i++)
@@ -120,7 +125,7 @@ int main()
 
         if (fabs(velocidadesNumerica[i] - velocidades[i]) > TOLERANCIA)
         {
-            printf("Diferencia significativa en el paso %d: Velocidad analítica = %.4f, Velocidad numérica = %.4f\n", i, velocidades[i], velocidadesNumerica[i]);
+            printf("Diferencia significativa en el paso %d: Velocidad analítica = " DECIMALES_CSV ", Velocidad numérica = " DECIMALES_CSV "\n", i, velocidades[i], velocidadesNumerica[i]);
         }
     }
 
@@ -141,7 +146,7 @@ int main()
     fprintf(archivoCSV, "Tiempo,Velocidad,Posición,Velocidad Numérica\n");
     for (int i = 0; i < numPasos; i++)
     {
-        fprintf(archivoCSV, "%.4f,%.4f,%.4f,%.4f\n", tiempos[i], velocidades[i], posiciones[i], velocidadesNumerica[i]);
+        fprintf(archivoCSV, DECIMALES_CSV "," DECIMALES_CSV "," DECIMALES_CSV "," DECIMALES_CSV "\n", tiempos[i], velocidades[i], posiciones[i], velocidadesNumerica[i]);
     }
 
     fclose(archivoCSV);
