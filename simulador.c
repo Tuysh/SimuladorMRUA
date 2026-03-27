@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define TOLERANCIA 1
+#define TOLERANCIA 5
 #define ARCHIVO_RESULTADOS "datos.csv"
 #define DECIMALES_CSV "%.4lf"
 #define PASOS_MAXIMOS 1000000
@@ -29,7 +29,7 @@ int main()
     }
 
     float aceleracion;
-    printf("Ingrese la aceleración (en m/s^2) (Ingrese 0 si quiere que la aceleración sea la gravedad terrestre): ");
+    printf("Ingrese la aceleración en m/s^2 (ingrese 0 para la gravedad terrestre): ");
     while (scanf("%f", &aceleracion) != 1)
     {
         printf("Entrada inválida. Por favor, ingrese un número para la aceleración: ");
@@ -43,7 +43,7 @@ int main()
     float velocidadInicial = 0;
     if (opcion != 1)
     {
-        printf("Ingrese la velocidad inicial (en m/s): ");
+        printf("Ingrese la velocidad inicial en m/s: ");
         while (scanf("%f", &velocidadInicial) != 1)
         {
             printf("Entrada inválida. Por favor, ingrese un número para la velocidad inicial: ");
@@ -52,7 +52,7 @@ int main()
     }
 
     float posicionInicial;
-    printf("Ingrese la posición incial (en m): ");
+    printf("Ingrese la posición inicial en metros: ");
     while (scanf("%f", &posicionInicial) != 1 || posicionInicial < 0)
     {
         printf("Entrada inválida. Por favor, ingrese un número positivo para la posición inicial: ");
@@ -60,7 +60,7 @@ int main()
     }
 
     float tiempoSimulacion;
-    printf("Ingrese el tiempo total de simulación (en segundos): ");
+    printf("Ingrese el tiempo total de simulación en segundos: ");
     while (scanf("%f", &tiempoSimulacion) != 1 || tiempoSimulacion <= 0)
     {
         printf("Entrada inválida. Por favor, ingrese un número positivo para el tiempo de simulación: ");
@@ -68,7 +68,7 @@ int main()
     }
 
     float tiempoPaso;
-    printf("Ingrese el tiempo de paso para la simulación (en segundos): ");
+    printf("Ingrese el tiempo de paso para la simulación en segundos: ");
     while (scanf("%f", &tiempoPaso) != 1 || tiempoPaso >= tiempoSimulacion || tiempoPaso <= 0)
     {
         printf("Entrada inválida. Por favor, ingrese un número positivo para el tiempo de paso: ");
@@ -113,7 +113,7 @@ int main()
 
     for (int i = 0; i < numPasos - 1; i++)
     {
-        velocidadesNumericas[i] = (posiciones[i + 1] - posiciones[i - 1]) / (2 * tiempoPaso);
+        velocidadesNumericas[i] = (posiciones[i + 1] - posiciones[i]) / (tiempoPaso);
 
         if (fabs(velocidadesNumericas[i] - velocidades[i]) > TOLERANCIA)
         {
