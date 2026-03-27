@@ -4,7 +4,14 @@
 
 #define TOLERANCIA 1
 #define ARCHIVO_RESULTADOS "datos.csv"
-#define DECIMALES_CSV "%.8f"
+#define DECIMALES_CSV "%.4lf"
+#define PASOS_MAXIMOS 1000000
+#define GRAVEDAD_TERRESTRE -9.81
+
+double velocidadesNumericas[PASOS_MAXIMOS];
+double velocidades[PASOS_MAXIMOS];
+double posiciones[PASOS_MAXIMOS];
+double tiempos[PASOS_MAXIMOS];
 
 int main()
 {
@@ -31,7 +38,7 @@ int main()
 
     // Generamos un valor por defecto para la aceleración si el usuario ingresa 0, asumiendo que se trata de una caída libre bajo la gravedad terrestre.
     if (aceleracion == 0)
-        aceleracion = -9.81;
+        aceleracion = GRAVEDAD_TERRESTRE;
 
     float velocidadInicial = 0;
     if (opcion != 1)
@@ -69,21 +76,10 @@ int main()
     }
 
     int numPasos = (int)(tiempoSimulacion / tiempoPaso);
-
-    float *velocidadesNumerica = malloc(numPasos * sizeof(float));
-    float *velocidades = malloc(numPasos * sizeof(float));
-    float *posiciones = malloc(numPasos * sizeof(float));
-    float *tiempos = malloc(numPasos * sizeof(float));
-
-    if (velocidadesNumerica == NULL || velocidades == NULL || posiciones == NULL || tiempos == NULL)
+    if (numPasos > PASOS_MAXIMOS)
     {
-        fprintf(stderr, "Error al asignar memoria.\n");
-        free(velocidadesNumerica);
-        free(velocidades);
-        free(posiciones);
-        free(tiempos);
-
-        return EXIT_FAILURE;
+        printf("El número de pasos excede el máximo permitido (%d). Ajustando a %d pasos.\n", PASOS_MAXIMOS, PASOS_MAXIMOS);
+        numPasos = PASOS_MAXIMOS;
     }
 
     if (velocidadInicial > 0 && aceleracion < 0)
@@ -113,42 +109,38 @@ int main()
         }
     }
 
+    velocidadesNumericas[0] = (posiciones[1] - posiciones[0]) / tiempoPaso;
+
     for (int i = 0; i < numPasos - 1; i++)
     {
-        velocidadesNumerica[i] = (posiciones[i + 1] - posiciones[i]) / tiempoPaso;
+        velocidadesNumericas[i] = (posiciones[i + 1] - posiciones[i - 1]) / (2 * tiempoPaso);
 
-        if (fabs(velocidadesNumerica[i] - velocidades[i]) > TOLERANCIA)
+        if (fabs(velocidadesNumericas[i] - velocidades[i]) > TOLERANCIA)
         {
-            printf("Diferencia significativa en el paso %d: Velocidad analítica = " DECIMALES_CSV ", Velocidad numérica = " DECIMALES_CSV "\n", i, velocidades[i], velocidadesNumerica[i]);
+            printf("Diferencia significativa en el paso %d: Velocidad analítica = " DECIMALES_CSV ", Velocidad numérica = " DECIMALES_CSV "\n", i, velocidades[i], velocidadesNumericas[i]);
         }
     }
 
     int ultimo = numPasos - 1;
-    velocidadesNumerica[ultimo] = velocidades[ultimo];
+    if (ultimo > 0)
+    {
+        velocidadesNumericas[ultimo] = (posiciones[ultimo] - posiciones[ultimo - 1]) / tiempoPaso;
+    }
 
     FILE *archivoCSV = fopen(ARCHIVO_RESULTADOS, "w");
     if (archivoCSV == NULL)
     {
         fprintf(stderr, "Error al abrir el archivo.\n");
-        free(tiempos);
-        free(velocidades);
-        free(posiciones);
-        free(velocidadesNumerica);
         return EXIT_FAILURE;
     }
 
-    fprintf(archivoCSV, "Tiempo,Velocidad,Posición,Velocidad Numérica\n");
+    fprintf(archivoCSV, "Tiempo,Velocidad,Posición\n");
     for (int i = 0; i < numPasos; i++)
     {
-        fprintf(archivoCSV, DECIMALES_CSV "," DECIMALES_CSV "," DECIMALES_CSV "," DECIMALES_CSV "\n", tiempos[i], velocidades[i], posiciones[i], velocidadesNumerica[i]);
+        fprintf(archivoCSV, DECIMALES_CSV "," DECIMALES_CSV "," DECIMALES_CSV "\n", tiempos[i], velocidades[i], posiciones[i]);
     }
 
     fclose(archivoCSV);
-
-    free(tiempos);
-    free(velocidades);
-    free(posiciones);
-    free(velocidadesNumerica);
 
     return EXIT_SUCCESS;
 }
