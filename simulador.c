@@ -15,11 +15,19 @@ double tiempos[PASOS_MAXIMOS];
 
 int main()
 {
-    printf("--- Simulador de Movimiento Rectilíneo Uniformemente Acelerado (MRUA) ---\n");
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+
+    printf("-------------------------------------------");
+    printf("\nSimulador MRUA\n");
+    printf("-------------------------------------------\n");
     printf("Seleccione el escenario a simular:\n");
     printf("1. Caída Libre\n");
     printf("2. Tiro Vertical Hacia Arriba\n");
-    printf("Ingrese su opción: ");
+    printf("\nIngrese su opción: ");
 
     int opcion;
     while (scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2))
@@ -75,6 +83,13 @@ int main()
         while (getchar() != '\n');
     }
 
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+
+
     int numPasos = (int)(tiempoSimulacion / tiempoPaso);
     if (numPasos > PASOS_MAXIMOS)
     {
@@ -126,6 +141,8 @@ int main()
     {
         velocidadesNumericas[ultimo] = (posiciones[ultimo] - posiciones[ultimo - 1]) / tiempoPaso;
     }
+
+    printf("\nSimulación completada. Guardando resultados en " ARCHIVO_RESULTADOS "...\n");
 
     FILE *archivoCSV = fopen(ARCHIVO_RESULTADOS, "w");
     if (archivoCSV == NULL)
