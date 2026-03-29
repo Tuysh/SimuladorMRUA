@@ -183,11 +183,7 @@ int main()
      * Calculamos la velocidad numérica para el último paso porque en el ciclo anterior solo calculamos hasta numPasos - 1
      * esto para evitar acceder a posiciones fuera del arreglo.
      */
-    int ultimo = numPasos - 1;
-    if (ultimo > 0)
-    {
-        velocidadesNumericas[ultimo] = (posiciones[ultimo] - posiciones[ultimo - 1]) / tiempoPaso;
-    }
+    velocidadesNumericas[numPasos - 1] = velocidades[numPasos - 1];
 
     // Finalmente llegamos a la parte de guardar los resultados en un archivo
     printf("\nSimulación completada. Guardando resultados en " ARCHIVO_RESULTADOS "...\n");
