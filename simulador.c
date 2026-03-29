@@ -159,6 +159,8 @@ int main()
         }
     }
 
+    velocidadesNumericas[0] = velocidades[0]; // Para el primer paso, la velocidad numérica es igual a la velocidad analítica
+
     /**
      * Este ciclo es para calcular la velocidad númerica usando la derivada numérica de la posición
      * Ademas de comprobar si es que conciden las velocidades con una tolerancia. Y se preguntaran.
@@ -167,9 +169,9 @@ int main()
      * Por ejemplo para las maquinas el 0.1 en binario es como para nosotros el 1/3 o sea 0.3333... y la maquina
      * no puede guardar decimales infinitos por lo que redondea a un número cercano.
      */
-    for (int i = 0; i < numPasos - 1; i++)
+    for (int i = 1; i < numPasos - 1; i++)
     {
-        velocidadesNumericas[i] = (posiciones[i + 1] - posiciones[i]) / (tiempoPaso);
+        velocidadesNumericas[i] = (posiciones[i + 1] - posiciones[i-1]) / (2 * tiempoPaso);
 
         if (fabs(velocidadesNumericas[i] - velocidades[i]) > TOLERANCIA)
         {
@@ -199,10 +201,10 @@ int main()
     }
 
     // Escribimos la cabecera del archivo CSV y luego los datos de tiempo, velocidad y posición en cada paso de la simulación
-    fprintf(archivoCSV, "Tiempo,Velocidad,Posición\n");
+    fprintf(archivoCSV, "Tiempo,Velocidad,Posición,Velocidad Numérica\n");
     for (int i = 0; i < numPasos; i++)
     {
-        fprintf(archivoCSV, DECIMALES_CSV "," DECIMALES_CSV "," DECIMALES_CSV "\n", tiempos[i], velocidades[i], posiciones[i]);
+        fprintf(archivoCSV, DECIMALES_CSV "," DECIMALES_CSV "," DECIMALES_CSV "," DECIMALES_CSV "\n", tiempos[i], velocidades[i], posiciones[i], velocidadesNumericas[i]);
     }
 
     // Cerramos el archivo después de escribir los datos
