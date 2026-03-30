@@ -69,7 +69,7 @@ int main()
         aceleracion = GRAVEDAD_TERRESTRE;
 
     // Si el usuario seleccionó la opción de tiro vertical pedimos la velocidad inicial, sino entoces lo dejamos en 0 para la caída libre.
-    float velocidadInicial = 0;
+    double velocidadInicial = 0;
     if (opcion != 1)
     {
         printf("Ingrese la velocidad inicial en m/s: ");
@@ -80,7 +80,7 @@ int main()
         }
     }
 
-    float posicionInicial;
+    double posicionInicial;
     printf("Ingrese la posición inicial en metros: ");
     while (scanf("%f", &posicionInicial) != 1 || posicionInicial < 0)
     {
@@ -88,7 +88,7 @@ int main()
         while (getchar() != '\n');
     }
 
-    float tiempoSimulacion;
+    double tiempoSimulacion;
     printf("Ingrese el tiempo total de simulación en segundos: ");
     while (scanf("%f", &tiempoSimulacion) != 1 || tiempoSimulacion <= 0)
     {
@@ -96,7 +96,7 @@ int main()
         while (getchar() != '\n');
     }
 
-    float tiempoPaso;
+    double tiempoPaso;
     printf("Ingrese el tiempo de paso para la simulación en segundos: ");
     while (scanf("%f", &tiempoPaso) != 1 || tiempoPaso >= tiempoSimulacion || tiempoPaso <= 0)
     {
@@ -130,11 +130,15 @@ int main()
     {
         printf("\nTu movimiento es tiro vertical hacia arriba.\n");
 
-        float tiempoAlturaMaxima = -velocidadInicial / aceleracion;
-        float alturaMaxima = posicionInicial + velocidadInicial * tiempoAlturaMaxima + 0.5 * aceleracion * tiempoAlturaMaxima * tiempoAlturaMaxima;
+        double tiempoAlturaMaxima = -velocidadInicial / aceleracion;
+        double alturaMaxima = posicionInicial + velocidadInicial * tiempoAlturaMaxima + 0.5 * aceleracion * tiempoAlturaMaxima * tiempoAlturaMaxima;
 
         printf("Tiempo para alcanzar la altura máxima: " DECIMALES_CSV " segundos\n", tiempoAlturaMaxima);
         printf("Altura máxima alcanzada: " DECIMALES_CSV " metros\n", alturaMaxima);
+    }
+    else
+    {
+        printf("\nTu movimiento es caída libre.\n");
     }
 
     /**
