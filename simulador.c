@@ -210,6 +210,42 @@ int main()
     // Cerramos el archivo después de escribir los datos
     fclose(archivoCSV);
 
+    // Imprimimos una vista previa en la consola
+    printf("\nResumen de la simulación en consola:\n");
+    printf("%-12s | %-12s | %-12s | %-15s\n", "Tiempo (s)", "Vel. (m/s)", "Pos. (m)", "Vel. Num. (m/s)");
+    printf("----------------------------------------------------------------\n");
+
+    if (numPasos <= 20)
+    {
+        // Si hay 20 pasos o menos, imprimimos la tabla completa para no omitir datos
+        for (int i = 0; i < numPasos; i++)
+        {
+            printf("%-12.4lf | %-12.4lf | %-12.4lf | %-15.4lf\n", tiempos[i], velocidades[i], posiciones[i], velocidadesNumericas[i]);
+        }
+    }
+    else
+    {
+        // Imprimimos los primeros 10 pasos
+        for (int i = 0; i < 10; i++)
+        {
+            printf("%-12.4lf | %-12.4lf | %-12.4lf | %-15.4lf\n", tiempos[i], velocidades[i], posiciones[i], velocidadesNumericas[i]);
+        }
+
+        // Indicador visual de que hay datos omitidos
+        printf("...          | ...          | ...          | ...            \n");
+
+        // Imprimimos los últimos 10 pasos
+        for (int i = numPasos - 10; i < numPasos; i++)
+        {
+            printf("%-12.4lf | %-12.4lf | %-12.4lf | %-15.4lf\n", tiempos[i], velocidades[i], posiciones[i], velocidadesNumericas[i]);
+        }
+    }
+    printf("----------------------------------------------------------------\n");
+
+    // Aviso importante para el usuario
+    printf("Nota: Esta es una vista previa. Para analizar los %d pasos con detalle,\n", numPasos);
+    printf("por favor revisa el archivo generado: '%s'.\n\n", ARCHIVO_RESULTADOS);
+
     // Informamos al usuario que los resultados se han guardado correctamente
     return EXIT_SUCCESS; // Si preguntan por qué EXIT_SUCCESS, es una macro que representa un valor de retorno exitoso para el programa es más legible que retornar 0 directamente.
 }
