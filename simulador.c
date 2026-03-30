@@ -58,9 +58,9 @@ int main()
 
     float aceleracion;
     printf("Ingrese la aceleración en m/s^2 (ingrese 0 para la gravedad terrestre): ");
-    while (scanf("%f", &aceleracion) != 1)
+    while (scanf("%f", &aceleracion) != 1 || aceleracion >= 0)
     {
-        printf("Entrada inválida. Por favor, ingrese un número para la aceleración: ");
+        printf("Entrada inválida. Por favor, ingrese un número para la aceleración (negativo): ");
         while (getchar() != '\n');
     }
 
