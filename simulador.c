@@ -42,7 +42,7 @@ int main()
      * Validación general de la entrada del usuario :)
      *
      * - scanf: Retorna 1 si leyó un número correctamente.
-     * - Condición: Si scanf falla OR el número no es 1 ni 2, pide el dato de nuevo.
+     * - Condición: Si scanf falla OR el número no es 1, pide el dato de nuevo.
      * - Limpieza de Búfer: El segundo "while" extrae del sistema cualquier texto
      *     sobrante que el usuario haya escrito por error (ej. "abc"), dejando la
      *     entrada limpia para el siguiente intento.
@@ -56,9 +56,9 @@ int main()
         while (getchar() != '\n');
     }
 
-    float aceleracion;
+    double aceleracion;
     printf("Ingrese la aceleración en m/s^2 (ingrese 0 para la gravedad terrestre): ");
-    while (scanf("%f", &aceleracion) != 1 || aceleracion >= 0)
+    while (scanf("%f", &aceleracion) != 1 || aceleracion > 0)
     {
         printf("Entrada inválida. Por favor, ingrese un número para la aceleración (negativo): ");
         while (getchar() != '\n');
