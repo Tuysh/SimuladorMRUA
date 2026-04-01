@@ -15,6 +15,10 @@ double velocidades[PASOS_MAXIMOS];
 double posiciones[PASOS_MAXIMOS];
 double tiempos[PASOS_MAXIMOS];
 
+// TODO: Actualizar documetanción
+// TODO: Corregir la derivada numérica :)
+// TODO: Mejorar el formato de salida en consola.
+
 int main()
 {
 #ifdef _WIN32
@@ -58,7 +62,7 @@ int main()
 
     double aceleracion;
     printf("Ingrese la aceleración en m/s^2 (ingrese 0 para la gravedad terrestre): ");
-    while (scanf("%f", &aceleracion) != 1 || aceleracion > 0)
+    while (scanf("%lf", &aceleracion) != 1 || aceleracion > 0)
     {
         printf("Entrada inválida. Por favor, ingrese un número para la aceleración (negativo): ");
         while (getchar() != '\n');
@@ -73,7 +77,7 @@ int main()
     if (opcion != 1)
     {
         printf("Ingrese la velocidad inicial en m/s: ");
-        while (scanf("%f", &velocidadInicial) != 1)
+        while (scanf("%lf", &velocidadInicial) != 1)
         {
             printf("Entrada inválida. Por favor, ingrese un número para la velocidad inicial: ");
             while (getchar() != '\n');
@@ -82,7 +86,7 @@ int main()
 
     double posicionInicial;
     printf("Ingrese la posición inicial en metros: ");
-    while (scanf("%f", &posicionInicial) != 1 || posicionInicial < 0)
+    while (scanf("%lf", &posicionInicial) != 1 || posicionInicial < 0)
     {
         printf("Entrada inválida. Por favor, ingrese un número positivo para la posición inicial: ");
         while (getchar() != '\n');
@@ -90,7 +94,7 @@ int main()
 
     double tiempoSimulacion;
     printf("Ingrese el tiempo total de simulación en segundos: ");
-    while (scanf("%f", &tiempoSimulacion) != 1 || tiempoSimulacion <= 0)
+    while (scanf("%lf", &tiempoSimulacion) != 1 || tiempoSimulacion <= 0)
     {
         printf("Entrada inválida. Por favor, ingrese un número positivo para el tiempo de simulación: ");
         while (getchar() != '\n');
@@ -98,7 +102,7 @@ int main()
 
     double tiempoPaso;
     printf("Ingrese el tiempo de paso para la simulación en segundos: ");
-    while (scanf("%f", &tiempoPaso) != 1 || tiempoPaso >= tiempoSimulacion || tiempoPaso <= 0)
+    while (scanf("%lf", &tiempoPaso) != 1 || tiempoPaso >= tiempoSimulacion || tiempoPaso <= 0)
     {
         printf("Entrada inválida. Por favor, ingrese un número positivo para el tiempo de paso: ");
         while (getchar() != '\n');
