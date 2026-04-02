@@ -7,7 +7,7 @@
 #define ARCHIVO_RESULTADOS "datos.csv" // Nombre del archivo CSV donde se guardarán los resultados
 #define DECIMALES_CSV "%.4lf"          // Formato para imprimir números con 4 decimales en el CSV
 #define PASOS_MAXIMOS 1000000          // Número máximo de pasos para la simulación, ajustable según las necesidades
-#define GRAVEDAD_TERRESTRE -9.81       // Aceleración debida a la gravedad terrestre en m/s^2, negativa porque actúa hacia abajo
+#define GRAVEDAD_TERRESTRE -9.8        // Aceleración debida a la gravedad terrestre en m/s^2, negativa porque actúa hacia abajo
 
 int main()
 {
