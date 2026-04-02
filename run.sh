@@ -23,7 +23,7 @@ fi
 echo "Generando gráficos..."
 
 if [ "$1" == "unico" ]; then
-    gnuplot grafico.gp
+    gnuplot gnuplot/grafico.gp
 else
-    gnuplot graficos.gp
+    gnuplot gnuplot/graficos.gp
 fi
