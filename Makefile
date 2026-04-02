@@ -15,7 +15,7 @@ endif
 
 all:
 	@echo "Detectado: $(TYPE)"
-	$(CC) $(CFLAGS) simulador.c -o simulador
+	$(CC) $(CFLAGS) simulador.c -o simulador -lm
 
 all: programa
 
