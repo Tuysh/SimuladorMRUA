@@ -9,17 +9,17 @@
 #define PASOS_MAXIMOS 1000000          // Número máximo de pasos para la simulación, ajustable según las necesidades
 #define GRAVEDAD_TERRESTRE -9.81       // Aceleración debida a la gravedad terrestre en m/s^2, negativa porque actúa hacia abajo
 
-double velocidadesNumericas[PASOS_MAXIMOS];
-double velocidades[PASOS_MAXIMOS];
-double posiciones[PASOS_MAXIMOS];
-double tiempos[PASOS_MAXIMOS];
-
 // TODO: Actualizar documetanción
 // TODO: Corregir la derivada numérica :)
 // TODO: Mejorar el formato de salida en consola.
 
 int main()
 {
+    static double velocidadesNumericas[PASOS_MAXIMOS];
+    static double velocidades[PASOS_MAXIMOS];
+    static double posiciones[PASOS_MAXIMOS];
+    static double tiempos[PASOS_MAXIMOS];
+
 #ifdef _WIN32
     system("cls"); // Limpiamos la consola en Windows
 #else
@@ -174,7 +174,7 @@ int main()
      * Por ejemplo para las maquinas el 0.1 en binario es como para nosotros el 1/3 o sea 0.3333... y la maquina
      * no puede guardar decimales infinitos por lo que redondea a un número cercano.
      */
-    for (int i = 1; i < numPasos - 1; i++)
+    for (int i = 0; i < numPasos - 1; i++)
     {
         velocidadesNumericas[i] = (posiciones[i + 1] - posiciones[i]) / (tiempoPaso);
     }
