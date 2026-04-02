@@ -9,10 +9,6 @@
 #define PASOS_MAXIMOS 1000000          // Número máximo de pasos para la simulación, ajustable según las necesidades
 #define GRAVEDAD_TERRESTRE -9.81       // Aceleración debida a la gravedad terrestre en m/s^2, negativa porque actúa hacia abajo
 
-// TODO: Actualizar documetanción
-// TODO: Corregir la derivada numérica :)
-// TODO: Mejorar el formato de salida en consola.
-
 int main()
 {
     static double velocidadesNumericas[PASOS_MAXIMOS];
