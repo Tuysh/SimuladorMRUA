@@ -4,7 +4,6 @@
 #include <math.h>
 
 // Definimos constantes que usaremos en el programa
-#define TOLERANCIA 5                   // Tolerancia para comparar velocidades y velocidades numéricas
 #define ARCHIVO_RESULTADOS "datos.csv" // Nombre del archivo CSV donde se guardarán los resultados
 #define DECIMALES_CSV "%.4lf"          // Formato para imprimir números con 4 decimales en el CSV
 #define PASOS_MAXIMOS 1000000          // Número máximo de pasos para la simulación, ajustable según las necesidades
@@ -167,8 +166,6 @@ int main()
         }
     }
 
-    velocidadesNumericas[0] = velocidades[0]; // Para el primer paso, la velocidad numérica es igual a la velocidad analítica
-
     /**
      * Este ciclo es para calcular la velocidad númerica usando la derivada numérica de la posición
      * Ademas de comprobar si es que conciden las velocidades con una tolerancia. Y se preguntaran.
@@ -179,12 +176,7 @@ int main()
      */
     for (int i = 1; i < numPasos - 1; i++)
     {
-        velocidadesNumericas[i] = (posiciones[i + 1] - posiciones[i-1]) / (2 * tiempoPaso);
-
-        if (fabs(velocidadesNumericas[i] - velocidades[i]) > TOLERANCIA)
-        {
-            printf("Diferencia significativa en el paso %d: Velocidad analítica = " DECIMALES_CSV ", Velocidad numérica = " DECIMALES_CSV "\n", i, velocidades[i], velocidadesNumericas[i]);
-        }
+        velocidadesNumericas[i] = (posiciones[i + 1] - posiciones[i]) / (tiempoPaso);
     }
 
     /**
@@ -205,10 +197,10 @@ int main()
     }
 
     // Escribimos la cabecera del archivo CSV y luego los datos de tiempo, velocidad y posición en cada paso de la simulación
-    fprintf(archivoCSV, "Tiempo,Velocidad,Posición,Velocidad Numérica\n");
+    fprintf(archivoCSV, "Tiempo,Velocidad,Posición,Velocidad Numérica, Diferencia Vel. vs Vel. Num.\n");
     for (int i = 0; i < numPasos; i++)
     {
-        fprintf(archivoCSV, DECIMALES_CSV "," DECIMALES_CSV "," DECIMALES_CSV "," DECIMALES_CSV "\n", tiempos[i], velocidades[i], posiciones[i], velocidadesNumericas[i]);
+        fprintf(archivoCSV, DECIMALES_CSV "," DECIMALES_CSV "," DECIMALES_CSV "," DECIMALES_CSV "," DECIMALES_CSV "\n", tiempos[i], velocidades[i], posiciones[i], velocidadesNumericas[i], fabs(velocidadesNumericas[i] - velocidades[i]));
     }
 
     // Cerramos el archivo después de escribir los datos
@@ -216,7 +208,7 @@ int main()
 
     // Imprimimos una vista previa en la consola
     printf("\nResumen de la simulación en consola:\n");
-    printf("%-12s | %-12s | %-12s | %-15s\n", "Tiempo (s)", "Vel. (m/s)", "Pos. (m)", "Vel. Num. (m/s)");
+    printf("%-12s | %-12s | %-12s | %-15s | %-12s\n", "Tiempo (s)", "Vel. (m/s)", "Pos. (m)", "Vel. Num. (m/s)", "Diferencia Vel. vs Vel. Num.");
     printf("----------------------------------------------------------------\n");
 
     if (numPasos <= 20)
@@ -224,7 +216,7 @@ int main()
         // Si hay 20 pasos o menos, imprimimos la tabla completa para no omitir datos
         for (int i = 0; i < numPasos; i++)
         {
-            printf("%-12.4lf | %-12.4lf | %-12.4lf | %-15.4lf\n", tiempos[i], velocidades[i], posiciones[i], velocidadesNumericas[i]);
+            printf("%-12.4lf | %-12.4lf | %-12.4lf | %-15.4lf | %-12.4lf\n", tiempos[i], velocidades[i], posiciones[i], velocidadesNumericas[i], fabs(velocidadesNumericas[i] - velocidades[i]));
         }
     }
     else
@@ -232,16 +224,16 @@ int main()
         // Imprimimos los primeros 10 pasos
         for (int i = 0; i < 10; i++)
         {
-            printf("%-12.4lf | %-12.4lf | %-12.4lf | %-15.4lf\n", tiempos[i], velocidades[i], posiciones[i], velocidadesNumericas[i]);
+            printf("%-12.4lf | %-12.4lf | %-12.4lf | %-15.4lf | %-12.4lf\n", tiempos[i], velocidades[i], posiciones[i], velocidadesNumericas[i], fabs(velocidadesNumericas[i] - velocidades[i]));
         }
 
         // Indicador visual de que hay datos omitidos
-        printf("...          | ...          | ...          | ...            \n");
+        printf("...          | ...          | ...          | ...             | ...          \n");
 
         // Imprimimos los últimos 10 pasos
         for (int i = numPasos - 10; i < numPasos; i++)
         {
-            printf("%-12.4lf | %-12.4lf | %-12.4lf | %-15.4lf\n", tiempos[i], velocidades[i], posiciones[i], velocidadesNumericas[i]);
+            printf("%-12.4lf | %-12.4lf | %-12.4lf | %-15.4lf | %-12.4lf\n", tiempos[i], velocidades[i], posiciones[i], velocidadesNumericas[i], fabs(velocidadesNumericas[i] - velocidades[i]));
         }
     }
     printf("----------------------------------------------------------------\n");
