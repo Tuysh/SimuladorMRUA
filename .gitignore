@@ -13,3 +13,6 @@ simulador
 
 # Directorio de compilación
 build/
+
+# VSCode
+.vscode/
