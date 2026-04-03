@@ -1,29 +1,14 @@
 CC = gcc
-CFLAGS = -Wall -g
+CFLAGS = -Wall -Wextra -g
+LIBS = -lm
 
-COMPILER_NAME := $(shell $(CC) --version)
+# Regla principal
+all: simulador
 
-ifneq (,$(findstring clang,$(COMPILER_NAME)))
-    TYPE = CLANG
-    CFLAGS += -Weverything
-else ifneq (,$(findstring gcc,$(COMPILER_NAME)))
-    TYPE = GCC
-    CFLAGS += -Wextra
-else
-    TYPE = UNKNOWN
-endif
+# Regla para construir el ejecutable
+simulador: codigo/simulador.c
+	$(CC) $(CFLAGS) codigo/simulador.c -o simulador $(LIBS)
 
-all:
-	@echo "Detectado: $(TYPE)"
-	$(CC) $(CFLAGS) codigo/simulador.c -o simulador -lm
-
-all: programa
-
-programa: simulador.o
-	$(CC) $(CFLAGS) -o simulador simulador.o
-
-simulador.o: simulador.c
-	$(CC) $(CFLAGS) -c simulador.c
-
+# Regla para limpiar archivos generados
 clean:
-	rm -f *.o simulador programa
+	rm -f simulador
