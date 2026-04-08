@@ -1,5 +1,5 @@
 # Configuración general para las graficas
-set terminal pngcairo size 800,600 enhanced font "Arial, 12"
+set terminal pngcairo size 800,600
 set datafile separator ","
 
 # Grafica posición vs tiempo :D
